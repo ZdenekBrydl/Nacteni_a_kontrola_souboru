@@ -1,0 +1,1 @@
+# Nacteni_a_kontrola_souboru
