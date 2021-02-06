@@ -74,19 +74,17 @@ namespace cvicny_ukol_puxdesign
             }
             //Zajisteni existence textoveho souboru plniciho funkci pameti pro zadany adresar v adresari pamet:
             if (!Directory.Exists($"{Global.pwd}\\pamet")) Directory.CreateDirectory($"{Global.pwd}\\pamet");
-            int delka_nazvu_pameti = 30;
-            if (Global.zadany_adresar.Length < 30) delka_nazvu_pameti = Global.zadany_adresar.Length;
-            if (!File.Exists($"{Global.pwd}\\pamet\\{Global.zadany_adresar[^delka_nazvu_pameti..].Replace(":\\", "-").Replace("\\", "_")}_pamet.txt"))
+            if (!File.Exists($"{Global.pwd}\\pamet\\{Global.zadany_adresar.Replace(":\\", "-").Replace("\\", "_")}_pamet.txt"))
             {
-                FileStream tmp = new FileStream($"{Global.pwd}\\pamet\\{Global.zadany_adresar[^delka_nazvu_pameti..].Replace(":\\", "-").Replace("\\", "_")}_pamet.txt", FileMode.OpenOrCreate);
+                FileStream tmp = new FileStream($"{Global.pwd}\\pamet\\{Global.zadany_adresar.Replace(":\\", "-").Replace("\\", "_")}_pamet.txt", FileMode.OpenOrCreate);
                 tmp.Close();
             }
-            StringReader SRradky_pameti = new StringReader(File.ReadAllText($"{Global.pwd}\\pamet\\{Global.zadany_adresar[^delka_nazvu_pameti..].Replace(":\\", "-").Replace("\\", "_")}_pamet.txt"));
+            StringReader SRradky_pameti = new StringReader(File.ReadAllText($"{Global.pwd}\\pamet\\{Global.zadany_adresar.Replace(":\\", "-").Replace("\\", "_")}_pamet.txt"));
             //Prvni zapis do pameti:
             if (SRradky_pameti.Peek() == -1)
             {
                 SRradky_pameti.Close();
-                using (FileStream fileStream_1psani = new FileStream($"{Global.pwd}\\pamet\\{Global.zadany_adresar[^delka_nazvu_pameti..].Replace(":\\", "-").Replace("\\", "_")}_pamet.txt", FileMode.Open))
+                using (FileStream fileStream_1psani = new FileStream($"{Global.pwd}\\pamet\\{Global.zadany_adresar.Replace(":\\", "-").Replace("\\", "_")}_pamet.txt", FileMode.Open))
                 {
                     using (StreamWriter pamet_1psani = new StreamWriter(fileStream_1psani))
                         Prvni_zapis_do_pameti(Global.zadany_adresar, pamet_1psani);
@@ -98,12 +96,12 @@ namespace cvicny_ukol_puxdesign
             {
                 SRradky_pameti.Close();
                 //Nacteni dat na porovnani:
-                Nacteni_pameti(delka_nazvu_pameti);
+                Nacteni_pameti();
                 Nacteni_adresare(Global.zadany_adresar);
                 //Porovnani:
                 Reseni_ukolu();
                 //Vypis do pameti:
-                File.WriteAllText($"{Global.pwd}\\pamet\\{Global.zadany_adresar[^delka_nazvu_pameti..].Replace(":\\", "-").Replace("\\", "_")}_pamet.txt", Global.nova_pamet);
+                File.WriteAllText($"{Global.pwd}\\pamet\\{Global.zadany_adresar.Replace(":\\", "-").Replace("\\", "_")}_pamet.txt", Global.nova_pamet);
                 //Vypis novych souboru:
                 Console.WriteLine("\n");
                 int pocet_novych_souboru = Global.nove_soubory.Split('\n').GetLength(0)-1;
@@ -216,16 +214,16 @@ namespace cvicny_ukol_puxdesign
             Console.WriteLine("\nChcete-li vypsat pamet stisknete Enter, pokud ne libovolnou jinou klavesu:");
             if (Console.ReadKey(true).Key == ConsoleKey.Enter)
             {
-                string radky_pameti = File.ReadAllText($"{Global.pwd}\\pamet\\{Global.zadany_adresar[^delka_nazvu_pameti..].Replace(":\\", "-").Replace("\\", "_")}_pamet.txt");
+                string radky_pameti = File.ReadAllText($"{Global.pwd}\\pamet\\{Global.zadany_adresar.Replace(":\\", "-").Replace("\\", "_")}_pamet.txt");
                 Console.WriteLine($"\nVypis pameti:\n{radky_pameti}");
             }
             Global.prvni_pruchod = false;
             Console.WriteLine("\nStisknete Escape pro unkonceni programu nebo jakoukoli jinou klavesu pro opakovani:");
             if (Console.ReadKey(true).Key != ConsoleKey.Escape) Main(args);
         }
-        static void Nacteni_pameti(int delka_nazvu_pameti)
+        static void Nacteni_pameti()
         {
-            StringReader SRradky_pameti = new StringReader(File.ReadAllText($"{Global.pwd}\\pamet\\{Global.zadany_adresar[^delka_nazvu_pameti..].Replace(":\\", "-").Replace("\\", "_")}_pamet.txt"));
+            StringReader SRradky_pameti = new StringReader(File.ReadAllText($"{Global.pwd}\\pamet\\{Global.zadany_adresar.Replace(":\\", "-").Replace("\\", "_")}_pamet.txt"));
             string radek_pameti = SRradky_pameti.ReadLine();
             int celkovy_pocet_adresaru_pameti = 0;
             while (radek_pameti.StartsWith(char.Parse(Global.zadany_adresar.Substring(0, 1))))
@@ -280,7 +278,7 @@ namespace cvicny_ukol_puxdesign
                         //adresar byl pridan
                         Global.nova_pamet += Global.adresar_adresare[y - pocet_odebranych_adresaru] + "\n";
                         Global.nove_adresare += Global.adresar_adresare[y - pocet_odebranych_adresaru][0..^21] + "\n";
-                        //Ulozeni pridanych souboru:
+                        //Ulozeni pridanych souboru pridaneho adresare:
                         for (int n = 0; 0 < Global.soubor_adresare.GetLength(1); n++)
                         {
                             if (Global.soubor_adresare[y - pocet_odebranych_adresaru, n] == null) break;
@@ -293,7 +291,7 @@ namespace cvicny_ukol_puxdesign
                     {
                         //adresar byl odebran
                         Global.odstranene_adresare += Global.adresar_pameti[y - pocet_pridanych_adresaru][0..^21] + "\n";
-                        //Ulozeni odebranych souboru:
+                        //Ulozeni odebranych souboru odebraneho adresare:
                         for (int n = 0; 0 < Global.soubor_pameti.GetLength(1); n++)
                         {
                             if (Global.soubor_pameti[y - pocet_pridanych_adresaru, n] == null) break;
@@ -310,7 +308,7 @@ namespace cvicny_ukol_puxdesign
                                 //adresar byl pridan
                                 Global.nova_pamet += Global.adresar_adresare[y - pocet_odebranych_adresaru] + "\n";
                                 Global.nove_adresare += Global.adresar_adresare[y - pocet_odebranych_adresaru][0..^21] + "\n";
-                                //Ulozeni pridanych souboru:
+                                //Ulozeni pridanych souboru pridaneho adresare:
                                 for (int n = 0; 0 < Global.soubor_adresare.GetLength(1); n++)
                                 {
                                     if (Global.soubor_adresare[y - pocet_odebranych_adresaru, n] == null) break;
@@ -323,7 +321,7 @@ namespace cvicny_ukol_puxdesign
                             {
                                 //adresar byl odebran
                                 Global.odstranene_adresare += Global.adresar_pameti[y - pocet_pridanych_adresaru][0..^21] + "\n";
-                                //Ulozeni odebranych souboru:
+                                //Ulozeni odebranych souboru odebraneho adresare:
                                 for (int n = 0; 0 < Global.soubor_pameti.GetLength(1); n++)
                                 {
                                     if (Global.soubor_pameti[y - pocet_pridanych_adresaru, n] == null) break;
@@ -360,6 +358,7 @@ namespace cvicny_ukol_puxdesign
                                 Global.odstranene_soubory += Global.soubor_pameti[y - pocet_pridanych_adresaru, x - pocet_pridanych_souboru].Remove(0, 27) + "\n";
                                 tmp_pocet_odebranych_souboru = 1;
                             }
+                            bool bez_zmeny = true;
                             if (Global.soubor_pameti[y - pocet_pridanych_adresaru, x - pocet_pridanych_souboru] != null && Global.soubor_adresare[y - pocet_odebranych_adresaru, x - pocet_odebranych_souboru] != null)
                             {
                                 if (Global.soubor_pameti[y - pocet_pridanych_adresaru, x - pocet_pridanych_souboru].Remove(0, 2) != Global.soubor_adresare[y - pocet_odebranych_adresaru, x - pocet_odebranych_souboru].Remove(0, 2))
@@ -372,17 +371,24 @@ namespace cvicny_ukol_puxdesign
                                         if (verze_souboru >= 9) nula = nula.Remove(0);
                                         string posledni_zmena = Global.soubor_adresare[y - pocet_odebranych_adresaru, x - pocet_odebranych_souboru].Substring(5, 19);
                                         Global.zmenene_soubory += $"{Global.soubor_pameti[y - pocet_pridanych_adresaru, x - pocet_pridanych_souboru].Remove(0, 27)} - verze {nula}{verze_souboru + 1}\n";
-                                        Global.nova_pamet += $"{nula}{verze_souboru + 1} - {posledni_zmena} - {Global.soubor_pameti[y - pocet_pridanych_adresaru, x - pocet_pridanych_souboru].Remove(0, 27)}\n"; ;
+                                        Global.nova_pamet += $"{nula}{verze_souboru + 1} - {posledni_zmena} - {Global.soubor_pameti[y - pocet_pridanych_adresaru, x - pocet_pridanych_souboru].Remove(0, 27)}\n";
+                                        bez_zmeny = false;
                                     }
                                     else
                                     {
                                         //Spojeni souboru pro zjisteni toho, kde soubor chybi:
                                         string soubory_adresare_z_pameti = "";
                                         for (int n = 0; n < Global.pocet_souboru_adresare_z_pameti[y - pocet_pridanych_adresaru]; n++)
+                                        {
+                                            if (Global.soubor_pameti[y - pocet_pridanych_adresaru, n] == null) break;
                                             soubory_adresare_z_pameti += Global.soubor_pameti[y - pocet_pridanych_adresaru, n];
+                                        }
                                         string soubory_adresare_z_adresare = "";
                                         for (int n = 0; n < Global.pocet_souboru_adresare_z_adresare[y - pocet_odebranych_adresaru]; n++)
+                                        {
+                                            if (Global.soubor_adresare[y - pocet_odebranych_adresaru, n] == null) break;
                                             soubory_adresare_z_adresare += Global.soubor_adresare[y - pocet_odebranych_adresaru, n];
+                                        }
                                         if (!soubory_adresare_z_pameti.Contains(Global.soubor_adresare[y - pocet_odebranych_adresaru, x - pocet_odebranych_souboru]))
                                         {
                                             //soubor byl pridan
@@ -399,7 +405,7 @@ namespace cvicny_ukol_puxdesign
                                     }
                                 }
                             }
-                            if (tmp_pocet_pridanych_souboru == 0 && tmp_pocet_odebranych_souboru == 0) Global.nova_pamet += Global.soubor_adresare[y - pocet_odebranych_adresaru, x - pocet_odebranych_souboru] + "\n";
+                            if (tmp_pocet_pridanych_souboru == 0 && tmp_pocet_odebranych_souboru == 0 && bez_zmeny) Global.nova_pamet += Global.soubor_adresare[y - pocet_odebranych_adresaru, x - pocet_odebranych_souboru] + "\n";
                             else if (tmp_pocet_pridanych_souboru == 0 || tmp_pocet_odebranych_souboru == 0)
                             {
                                 pocet_pridanych_souboru += tmp_pocet_pridanych_souboru;
