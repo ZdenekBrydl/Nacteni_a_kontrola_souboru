@@ -272,7 +272,6 @@ namespace cvicny_ukol_puxdesign
                 int tmp_pocet_pridanych_adresaru = 0;
                 int tmp_pocet_odebranych_adresaru = 0;
                 if (Global.adresar_pameti[y - pocet_pridanych_adresaru] == null && Global.adresar_adresare[y - pocet_odebranych_adresaru] == null) break;
-                {
                     if (Global.adresar_pameti[y - pocet_pridanych_adresaru] == null)
                     {
                         //adresar byl pridan
@@ -299,36 +298,35 @@ namespace cvicny_ukol_puxdesign
                         }
                         tmp_pocet_odebranych_adresaru = 1;
                     }
-                    if (Global.adresar_pameti[y - pocet_pridanych_adresaru] != null && Global.adresar_adresare[y - pocet_odebranych_adresaru] != null)
+                if (Global.adresar_pameti[y - pocet_pridanych_adresaru] != null && Global.adresar_adresare[y - pocet_odebranych_adresaru] != null)
+                {
+                    if (Global.adresar_pameti[y - pocet_pridanych_adresaru] != Global.adresar_adresare[y - pocet_odebranych_adresaru])
                     {
-                        if (Global.adresar_pameti[y - pocet_pridanych_adresaru] != Global.adresar_adresare[y - pocet_odebranych_adresaru])
+                        if (!string.Concat(Global.adresar_pameti).Contains(Global.adresar_adresare[y - pocet_odebranych_adresaru]))
                         {
-                            if (!string.Concat(Global.adresar_pameti).Contains(Global.adresar_adresare[y - pocet_odebranych_adresaru]))
+                            //adresar byl pridan
+                            Global.nova_pamet += Global.adresar_adresare[y - pocet_odebranych_adresaru] + "\n";
+                            Global.nove_adresare += Global.adresar_adresare[y - pocet_odebranych_adresaru][0..^21] + "\n";
+                            //Ulozeni pridanych souboru pridaneho adresare:
+                            for (int n = 0; 0 < Global.soubor_adresare.GetLength(1); n++)
                             {
-                                //adresar byl pridan
-                                Global.nova_pamet += Global.adresar_adresare[y - pocet_odebranych_adresaru] + "\n";
-                                Global.nove_adresare += Global.adresar_adresare[y - pocet_odebranych_adresaru][0..^21] + "\n";
-                                //Ulozeni pridanych souboru pridaneho adresare:
-                                for (int n = 0; 0 < Global.soubor_adresare.GetLength(1); n++)
-                                {
-                                    if (Global.soubor_adresare[y - pocet_odebranych_adresaru, n] == null) break;
-                                    Global.nova_pamet += Global.soubor_adresare[y - pocet_odebranych_adresaru, n] + "\n";
-                                    Global.nove_soubory += Global.soubor_adresare[y - pocet_odebranych_adresaru, n].Remove(0, 27) + "\n";
-                                }
-                                tmp_pocet_pridanych_adresaru = 1;
+                                if (Global.soubor_adresare[y - pocet_odebranych_adresaru, n] == null) break;
+                                Global.nova_pamet += Global.soubor_adresare[y - pocet_odebranych_adresaru, n] + "\n";
+                                Global.nove_soubory += Global.soubor_adresare[y - pocet_odebranych_adresaru, n].Remove(0, 27) + "\n";
                             }
-                            if (!string.Concat(Global.adresar_adresare).Contains(Global.adresar_pameti[y - pocet_pridanych_adresaru]))
+                            tmp_pocet_pridanych_adresaru = 1;
+                        }
+                        if (!string.Concat(Global.adresar_adresare).Contains(Global.adresar_pameti[y - pocet_pridanych_adresaru]))
+                        {
+                            //adresar byl odebran
+                            Global.odstranene_adresare += Global.adresar_pameti[y - pocet_pridanych_adresaru][0..^21] + "\n";
+                            //Ulozeni odebranych souboru odebraneho adresare:
+                            for (int n = 0; 0 < Global.soubor_pameti.GetLength(1); n++)
                             {
-                                //adresar byl odebran
-                                Global.odstranene_adresare += Global.adresar_pameti[y - pocet_pridanych_adresaru][0..^21] + "\n";
-                                //Ulozeni odebranych souboru odebraneho adresare:
-                                for (int n = 0; 0 < Global.soubor_pameti.GetLength(1); n++)
-                                {
-                                    if (Global.soubor_pameti[y - pocet_pridanych_adresaru, n] == null) break;
-                                    Global.odstranene_soubory += Global.soubor_pameti[y - pocet_pridanych_adresaru, n].Remove(0, 27) + "\n";
-                                }
-                                tmp_pocet_odebranych_adresaru = 1;
+                                if (Global.soubor_pameti[y - pocet_pridanych_adresaru, n] == null) break;
+                                Global.odstranene_soubory += Global.soubor_pameti[y - pocet_pridanych_adresaru, n].Remove(0, 27) + "\n";
                             }
+                            tmp_pocet_odebranych_adresaru = 1;
                         }
                     }
                 }
@@ -343,65 +341,62 @@ namespace cvicny_ukol_puxdesign
                         int tmp_pocet_pridanych_souboru = 0;
                         int tmp_pocet_odebranych_souboru = 0;
                         if (Global.soubor_pameti[y - pocet_pridanych_adresaru, x - pocet_pridanych_souboru] == null && Global.soubor_adresare[y - pocet_odebranych_adresaru, x - pocet_odebranych_souboru] == null) break;
-                        else 
+                        if (Global.soubor_pameti[y - pocet_pridanych_adresaru, x - pocet_pridanych_souboru] == null)
                         {
-                            if (Global.soubor_pameti[y - pocet_pridanych_adresaru, x - pocet_pridanych_souboru] == null)
+                            //soubor byl pridan
+                            Global.nova_pamet += Global.soubor_adresare[y - pocet_odebranych_adresaru, x - pocet_odebranych_souboru] + "\n";
+                            Global.nove_soubory += Global.soubor_adresare[y - pocet_odebranych_adresaru, x - pocet_odebranych_souboru].Remove(0, 27) + "\n";
+                            tmp_pocet_pridanych_souboru = 1;
+                        }
+                        if (Global.soubor_adresare[y - pocet_odebranych_adresaru, x - pocet_odebranych_souboru] == null)
+                        {
+                            //soubor byl odebran
+                            Global.odstranene_soubory += Global.soubor_pameti[y - pocet_pridanych_adresaru, x - pocet_pridanych_souboru].Remove(0, 27) + "\n";
+                            tmp_pocet_odebranych_souboru = 1;
+                        }
+                        bool bez_zmeny = true;
+                        if (Global.soubor_pameti[y - pocet_pridanych_adresaru, x - pocet_pridanych_souboru] != null && Global.soubor_adresare[y - pocet_odebranych_adresaru, x - pocet_odebranych_souboru] != null)
+                        {
+                            if (Global.soubor_pameti[y - pocet_pridanych_adresaru, x - pocet_pridanych_souboru].Remove(0, 2) != Global.soubor_adresare[y - pocet_odebranych_adresaru, x - pocet_odebranych_souboru].Remove(0, 2))
                             {
-                                //soubor byl pridan
-                                Global.nova_pamet += Global.soubor_adresare[y - pocet_odebranych_adresaru, x - pocet_odebranych_souboru] + "\n";
-                                Global.nove_soubory += Global.soubor_adresare[y - pocet_odebranych_adresaru, x - pocet_odebranych_souboru].Remove(0, 27) + "\n";
-                                tmp_pocet_pridanych_souboru = 1;
-                            }
-                            if (Global.soubor_adresare[y - pocet_odebranych_adresaru, x - pocet_odebranych_souboru] == null)
-                            {
-                                //soubor byl odebran
-                                Global.odstranene_soubory += Global.soubor_pameti[y - pocet_pridanych_adresaru, x - pocet_pridanych_souboru].Remove(0, 27) + "\n";
-                                tmp_pocet_odebranych_souboru = 1;
-                            }
-                            bool bez_zmeny = true;
-                            if (Global.soubor_pameti[y - pocet_pridanych_adresaru, x - pocet_pridanych_souboru] != null && Global.soubor_adresare[y - pocet_odebranych_adresaru, x - pocet_odebranych_souboru] != null)
-                            {
-                                if (Global.soubor_pameti[y - pocet_pridanych_adresaru, x - pocet_pridanych_souboru].Remove(0, 2) != Global.soubor_adresare[y - pocet_odebranych_adresaru, x - pocet_odebranych_souboru].Remove(0, 2))
+                                if (Global.soubor_pameti[y - pocet_pridanych_adresaru, x - pocet_pridanych_souboru].Remove(0, 27) == Global.soubor_adresare[y - pocet_odebranych_adresaru, x - pocet_odebranych_souboru].Remove(0, 27))
                                 {
-                                    if (Global.soubor_pameti[y - pocet_pridanych_adresaru, x - pocet_pridanych_souboru].Remove(0, 27) == Global.soubor_adresare[y - pocet_odebranych_adresaru, x - pocet_odebranych_souboru].Remove(0, 27))
+                                    //soubor byl zmenen
+                                    int verze_souboru = int.Parse(Global.soubor_pameti[y - pocet_pridanych_adresaru, x - pocet_pridanych_souboru].Substring(0, 2));
+                                    string nula = "0";
+                                    if (verze_souboru >= 9) nula = nula.Remove(0);
+                                    string posledni_zmena = Global.soubor_adresare[y - pocet_odebranych_adresaru, x - pocet_odebranych_souboru].Substring(5, 19);
+                                    Global.zmenene_soubory += $"{Global.soubor_pameti[y - pocet_pridanych_adresaru, x - pocet_pridanych_souboru].Remove(0, 27)} - verze {nula}{verze_souboru + 1}\n";
+                                    Global.nova_pamet += $"{nula}{verze_souboru + 1} - {posledni_zmena} - {Global.soubor_pameti[y - pocet_pridanych_adresaru, x - pocet_pridanych_souboru].Remove(0, 27)}\n";
+                                    bez_zmeny = false;
+                                }
+                                else
+                                {
+                                    //Spojeni souboru pro zjisteni toho, kde soubor chybi:
+                                    string soubory_adresare_z_pameti = "";
+                                    for (int n = 0; n < Global.pocet_souboru_adresare_z_pameti[y - pocet_pridanych_adresaru]; n++)
                                     {
-                                        //soubor byl zmenen
-                                        int verze_souboru = int.Parse(Global.soubor_pameti[y - pocet_pridanych_adresaru, x - pocet_pridanych_souboru].Substring(0, 2));
-                                        string nula = "0";
-                                        if (verze_souboru >= 9) nula = nula.Remove(0);
-                                        string posledni_zmena = Global.soubor_adresare[y - pocet_odebranych_adresaru, x - pocet_odebranych_souboru].Substring(5, 19);
-                                        Global.zmenene_soubory += $"{Global.soubor_pameti[y - pocet_pridanych_adresaru, x - pocet_pridanych_souboru].Remove(0, 27)} - verze {nula}{verze_souboru + 1}\n";
-                                        Global.nova_pamet += $"{nula}{verze_souboru + 1} - {posledni_zmena} - {Global.soubor_pameti[y - pocet_pridanych_adresaru, x - pocet_pridanych_souboru].Remove(0, 27)}\n";
-                                        bez_zmeny = false;
+                                        if (Global.soubor_pameti[y - pocet_pridanych_adresaru, n] == null) break;
+                                        soubory_adresare_z_pameti += Global.soubor_pameti[y - pocet_pridanych_adresaru, n];
                                     }
-                                    else
+                                    string soubory_adresare_z_adresare = "";
+                                    for (int n = 0; n < Global.pocet_souboru_adresare_z_adresare[y - pocet_odebranych_adresaru]; n++)
                                     {
-                                        //Spojeni souboru pro zjisteni toho, kde soubor chybi:
-                                        string soubory_adresare_z_pameti = "";
-                                        for (int n = 0; n < Global.pocet_souboru_adresare_z_pameti[y - pocet_pridanych_adresaru]; n++)
-                                        {
-                                            if (Global.soubor_pameti[y - pocet_pridanych_adresaru, n] == null) break;
-                                            soubory_adresare_z_pameti += Global.soubor_pameti[y - pocet_pridanych_adresaru, n];
-                                        }
-                                        string soubory_adresare_z_adresare = "";
-                                        for (int n = 0; n < Global.pocet_souboru_adresare_z_adresare[y - pocet_odebranych_adresaru]; n++)
-                                        {
-                                            if (Global.soubor_adresare[y - pocet_odebranych_adresaru, n] == null) break;
-                                            soubory_adresare_z_adresare += Global.soubor_adresare[y - pocet_odebranych_adresaru, n];
-                                        }
-                                        if (!soubory_adresare_z_pameti.Contains(Global.soubor_adresare[y - pocet_odebranych_adresaru, x - pocet_odebranych_souboru]))
-                                        {
-                                            //soubor byl pridan
-                                            Global.nova_pamet += Global.soubor_adresare[y - pocet_odebranych_adresaru, x - pocet_odebranych_souboru] + "\n";
-                                            Global.nove_soubory += Global.soubor_adresare[y - pocet_odebranych_adresaru, x - pocet_odebranych_souboru].Remove(0, 27) + "\n";
-                                            tmp_pocet_pridanych_souboru = 1;
-                                        }
-                                        if (!soubory_adresare_z_adresare.Contains(Global.soubor_pameti[y - pocet_pridanych_adresaru, x - pocet_pridanych_souboru]))
-                                        {
-                                            // soubor byl odebran
-                                            Global.odstranene_soubory += Global.soubor_pameti[y - pocet_pridanych_adresaru, x - pocet_pridanych_souboru].Remove(0, 27) + "\n";
-                                            tmp_pocet_odebranych_souboru = 1;
-                                        }
+                                        if (Global.soubor_adresare[y - pocet_odebranych_adresaru, n] == null) break;
+                                        soubory_adresare_z_adresare += Global.soubor_adresare[y - pocet_odebranych_adresaru, n];
+                                    }
+                                    if (!soubory_adresare_z_pameti.Contains(Global.soubor_adresare[y - pocet_odebranych_adresaru, x - pocet_odebranych_souboru]))
+                                    {
+                                        //soubor byl pridan
+                                        Global.nova_pamet += Global.soubor_adresare[y - pocet_odebranych_adresaru, x - pocet_odebranych_souboru] + "\n";
+                                        Global.nove_soubory += Global.soubor_adresare[y - pocet_odebranych_adresaru, x - pocet_odebranych_souboru].Remove(0, 27) + "\n";
+                                        tmp_pocet_pridanych_souboru = 1;
+                                    }
+                                    if (!soubory_adresare_z_adresare.Contains(Global.soubor_pameti[y - pocet_pridanych_adresaru, x - pocet_pridanych_souboru]))
+                                    {
+                                        // soubor byl odebran
+                                        Global.odstranene_soubory += Global.soubor_pameti[y - pocet_pridanych_adresaru, x - pocet_pridanych_souboru].Remove(0, 27) + "\n";
+                                        tmp_pocet_odebranych_souboru = 1;
                                     }
                                 }
                             }
